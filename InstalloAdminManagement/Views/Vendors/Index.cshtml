@@ -1,0 +1,68 @@
+@model IEnumerable<InstallmentAdminPanel.Models.Vendor>
+@{
+    ViewData["Title"] = "Vendors";
+    ViewBag.Active = "Vendors";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Vendors</h1>
+        <div class="subtitle">Suppliers you purchase stock from before it's sold on installment.</div>
+    </div>
+    <a asp-action="Create" class="btn btn-brass">+ Add Vendor</a>
+</div>
+
+<div class="card">
+    <table class="table-ledger">
+        <thead>
+            <tr>
+                <th>Vendor</th>
+                <th>Contact Person</th>
+                <th>Phone</th>
+                <th>Products Supplied</th>
+                <th>Amount Owed</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var v in Model)
+                {
+                    <tr>
+                        <td class="cell-name">@v.BusinessName</td>
+                        <td>@v.ContactPerson</td>
+                        <td>@v.Phone</td>
+                        <td class="mono">@v.ProductCount</td>
+                        <td class="amount">Rs @v.AmountOwed.ToString("N0")</td>
+                        <td>
+                            @if (v.IsActive)
+                            {
+                                <span class="stamp stamp-active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="stamp stamp-inactive">Inactive</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@v.Id" class="btn btn-ghost btn-sm">View</a>
+                            <a asp-action="Edit" asp-route-id="@v.Id" class="btn btn-ghost btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="7">
+                    <div class="empty-state">
+                        <h3>No vendors yet</h3>
+                        <p>Add a vendor to start linking products to a supplier.</p>
+                        <a asp-action="Create" class="btn btn-brass">+ Add Vendor</a>
+                    </div>
+                </td></tr>
+            }
+        </tbody>
+    </table>
+</div>

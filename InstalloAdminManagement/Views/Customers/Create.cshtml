@@ -1,0 +1,133 @@
+@model InstallmentAdminPanel.Models.CustomerCreateViewModel
+@{
+    ViewData["Title"] = "Add Customer";
+    ViewBag.Active = "Customers";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Add Customer</h1>
+        <div class="subtitle">Every customer needs at least one guarantor before a sale can be created.</div>
+    </div>
+</div>
+
+<form asp-action="Create" method="post" class="card p-4" style="max-width: 820px;">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+    <div class="form-section-title">Customer Details</div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Full Name</label>
+            <input asp-for="FullName" class="form-control" placeholder="e.g. Ahmed Raza" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Father / Husband Name</label>
+            <input asp-for="FatherOrHusbandName" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">CNIC Number</label>
+            <input asp-for="CnicNumber" class="form-control" placeholder="XXXXX-XXXXXXX-X" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Phone Number</label>
+            <input asp-for="Phone" class="form-control" placeholder="03XX-XXXXXXX" />
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Residential Address</label>
+            <input asp-for="Address" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Occupation / Employer</label>
+            <input asp-for="Occupation" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Monthly Income (approx.)</label>
+            <input asp-for="MonthlyIncome" class="form-control mono" placeholder="Rs" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">CNIC Front Image</label>
+            <input type="file" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">CNIC Back Image</label>
+            <input type="file" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-section-title">Guarantors <span class="text-slate" style="font-weight:400;font-size:12.5px;">— at least 1 required, up to 2</span></div>
+
+    <div class="guarantor-block">
+        <span class="guarantor-tag">Guarantor 1 (required)</span>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Full Name</label>
+                <input asp-for="Guarantor1Name" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Relationship to Customer</label>
+                <select asp-for="Guarantor1Relationship" class="form-select">
+                    <option value="">Select...</option>
+                    <option>Father</option>
+                    <option>Brother</option>
+                    <option>Relative</option>
+                    <option>Friend</option>
+                    <option>Employer</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">CNIC Number</label>
+                <input asp-for="Guarantor1Cnic" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Phone Number</label>
+                <input asp-for="Guarantor1Phone" class="form-control" />
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Address</label>
+                <input asp-for="Guarantor1Address" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <div class="guarantor-block" id="guarantor2Block" style="display:none;">
+        <span class="guarantor-tag">Guarantor 2 (optional)</span>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Full Name</label>
+                <input asp-for="Guarantor2Name" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Relationship to Customer</label>
+                <select asp-for="Guarantor2Relationship" class="form-select">
+                    <option value="">Select...</option>
+                    <option>Father</option>
+                    <option>Brother</option>
+                    <option>Relative</option>
+                    <option>Friend</option>
+                    <option>Employer</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">CNIC Number</label>
+                <input asp-for="Guarantor2Cnic" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Phone Number</label>
+                <input asp-for="Guarantor2Phone" class="form-control" />
+            </div>
+            <div class="col-md-12">
+                <label class="form-label">Address</label>
+                <input asp-for="Guarantor2Address" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-outline-ink mb-4" id="addGuarantor2Btn" onclick="document.getElementById('guarantor2Block').style.display='block'; this.style.display='none';">+ Add Second Guarantor</button>
+
+    <div class="d-flex gap-2 pt-2" style="border-top:1px solid var(--line);padding-top:18px;">
+        <button type="submit" class="btn btn-brass">Save Customer</button>
+        <a asp-action="Index" class="btn btn-ghost">Cancel</a>
+    </div>
+</form>

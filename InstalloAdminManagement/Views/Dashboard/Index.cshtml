@@ -1,0 +1,166 @@
+@model InstallmentAdminPanel.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewBag.Active = "Dashboard";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Good morning, @(ViewBag.OwnerFirstName ?? "there")</h1>
+        <div class="subtitle">Here's how the ledger looks today, @DateTime.Now.ToString("dd MMMM yyyy").</div>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-controller="Sales" asp-action="Create" class="btn btn-brass">+ New Installment Sale</a>
+        <a asp-controller="Payments" asp-action="Index" class="btn btn-outline-ink">Record a Payment</a>
+    </div>
+</div>
+
+<!-- Stat tiles -->
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile">
+            <div class="stat-accent green"></div>
+            <div class="stat-label">Collected This Month</div>
+            <div class="stat-value">Rs @Model.CollectedThisMonth.ToString("N0")</div>
+            <div class="stat-delta up">&uarr; @Model.CollectedDeltaPercent% vs last month</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile">
+            <div class="stat-accent brass"></div>
+            <div class="stat-label">Pending Dues</div>
+            <div class="stat-value">Rs @Model.PendingDues.ToString("N0")</div>
+            <div class="stat-delta">across @Model.PendingInstallmentCount installments</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile">
+            <div class="stat-accent red"></div>
+            <div class="stat-label">Overdue Amount</div>
+            <div class="stat-value">Rs @Model.OverdueAmount.ToString("N0")</div>
+            <div class="stat-delta down">@Model.OverdueCustomerCount customers in default</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile">
+            <div class="stat-accent ink"></div>
+            <div class="stat-label">Active Installment Plans</div>
+            <div class="stat-value">@Model.ActivePlanCount</div>
+            <div class="stat-delta">@Model.ActiveCustomerCount active customers</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- Due today / this week -->
+    <div class="col-lg-7">
+        <div class="card mb-3">
+            <div class="card-header-plain">
+                <h2>Due This Week</h2>
+                <a asp-controller="Payments" asp-action="Index" class="text-brass" style="font-size:12.5px;font-weight:600;">View all &rarr;</a>
+            </div>
+            <table class="table-ledger">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Installment #</th>
+                        <th>Due Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.DueThisWeek != null && Model.DueThisWeek.Any())
+                    {
+                        @foreach (var row in Model.DueThisWeek)
+                        {
+                            <tr>
+                                <td class="cell-name">@row.CustomerName</td>
+                                <td>@row.ProductName</td>
+                                <td class="mono">@row.InstallmentNumber / @row.TotalInstallments</td>
+                                <td class="mono">@row.DueDate.ToString("dd MMM")</td>
+                                <td class="amount">Rs @row.AmountDue.ToString("N0")</td>
+                                <td>
+                                    @if (row.Status == "Overdue")
+                                    {
+                                        <span class="stamp stamp-overdue">Overdue</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="stamp stamp-due">Due</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6"><div class="empty-state py-4"><span class="text-slate">Nothing due this week. The ledger is clear.</span></div></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Top defaulters / at-risk -->
+    <div class="col-lg-5">
+        <div class="card mb-3">
+            <div class="card-header-plain">
+                <h2>Needs Attention</h2>
+                <a asp-controller="Reports" asp-action="Defaulters" class="text-brass" style="font-size:12.5px;font-weight:600;">Full list &rarr;</a>
+            </div>
+            <table class="table-ledger">
+                <thead>
+                    <tr><th>Customer</th><th>Overdue</th><th>Days Late</th></tr>
+                </thead>
+                <tbody>
+                    @if (Model.TopDefaulters != null && Model.TopDefaulters.Any())
+                    {
+                        @foreach (var d in Model.TopDefaulters)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="cell-name">@d.CustomerName</div>
+                                    <div class="cell-sub">@d.Phone</div>
+                                </td>
+                                <td class="amount">Rs @d.OverdueAmount.ToString("N0")</td>
+                                <td class="mono text-danger">@d.DaysLate d</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="3"><div class="empty-state py-4"><span class="text-slate">No overdue accounts right now.</span></div></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-header-plain"><h2>Recent Activity</h2></div>
+            <div class="p-3">
+                @if (Model.RecentActivity != null && Model.RecentActivity.Any())
+                {
+                    @foreach (var a in Model.RecentActivity)
+                    {
+                        <div class="d-flex justify-content-between align-items-start py-2" style="border-bottom:1px solid var(--line);">
+                            <div>
+                                <div style="font-size:13px;">@a.Description</div>
+                                <div class="cell-sub">@a.Timestamp.ToString("dd MMM, h:mm tt")</div>
+                            </div>
+                            @if (!string.IsNullOrEmpty(a.Amount))
+                            {
+                                <div class="amount" style="font-size:13px;">@a.Amount</div>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="empty-state py-3"><span class="text-slate">No recent activity yet.</span></div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

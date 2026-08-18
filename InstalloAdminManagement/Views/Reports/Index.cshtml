@@ -1,0 +1,112 @@
+@model InstallmentAdminPanel.Models.ReportsViewModel
+@{
+    ViewData["Title"] = "Reports & Income";
+    ViewBag.Active = "Reports";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Reports &amp; Income</h1>
+        <div class="subtitle">Store performance, collections and outstanding risk.</div>
+    </div>
+    <div class="d-flex gap-2">
+        <select class="form-select" style="max-width:160px;">
+            <option>This Month</option>
+            <option>Last Month</option>
+            <option>This Quarter</option>
+            <option>This Year</option>
+            <option>Custom Range</option>
+        </select>
+        <button class="btn btn-outline-ink">Export CSV</button>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile">
+            <div class="stat-label">Total Income (Markup)</div>
+            <div class="stat-value">Rs @Model.TotalMarkupIncome.ToString("N0")</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile">
+            <div class="stat-label">Principal Collected</div>
+            <div class="stat-value">Rs @Model.PrincipalCollected.ToString("N0")</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile">
+            <div class="stat-label">Late Fees Collected</div>
+            <div class="stat-value">Rs @Model.LateFeesCollected.ToString("N0")</div>
+        </div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-tile">
+            <div class="stat-label">Total Outstanding</div>
+            <div class="stat-value">Rs @Model.TotalOutstanding.ToString("N0")</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <div class="card mb-3">
+            <div class="card-header-plain"><h2>Income by Vendor / Product Category</h2></div>
+            <table class="table-ledger">
+                <thead><tr><th>Vendor</th><th>Products Sold</th><th>Revenue</th><th>Share</th></tr></thead>
+                <tbody>
+                    @if (Model.VendorBreakdown != null && Model.VendorBreakdown.Any())
+                    {
+                        @foreach (var v in Model.VendorBreakdown)
+                        {
+                            <tr>
+                                <td class="cell-name">@v.VendorName</td>
+                                <td class="mono">@v.UnitsSold</td>
+                                <td class="amount">Rs @v.Revenue.ToString("N0")</td>
+                                <td style="min-width:100px;">
+                                    <div class="progress-track"><div class="progress-fill" style="width:@v.SharePercent%"></div></div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="4"><div class="empty-state py-4">No sales recorded in this period.</div></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header-plain">
+                <h2>Defaulters List</h2>
+                <a asp-action="Defaulters" class="text-brass" style="font-size:12.5px;font-weight:600;">Full list &rarr;</a>
+            </div>
+            <table class="table-ledger">
+                <thead><tr><th>Customer</th><th>Overdue</th><th>Guarantor</th></tr></thead>
+                <tbody>
+                    @if (Model.Defaulters != null && Model.Defaulters.Any())
+                    {
+                        @foreach (var d in Model.Defaulters)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="cell-name">@d.CustomerName</div>
+                                    <div class="cell-sub">@d.DaysLate days late</div>
+                                </td>
+                                <td class="amount">Rs @d.OverdueAmount.ToString("N0")</td>
+                                <td class="cell-sub">@d.GuarantorName</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="3"><div class="empty-state py-4">No defaulters &mdash; clean ledger.</div></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

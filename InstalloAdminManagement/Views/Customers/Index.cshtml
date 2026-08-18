@@ -1,0 +1,97 @@
+@model IEnumerable<InstallmentAdminPanel.Models.Customer>
+@{
+    ViewData["Title"] = "Customers";
+    ViewBag.Active = "Customers";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Customers</h1>
+        <div class="subtitle">Everyone who has bought on installment from your store.</div>
+    </div>
+    <a asp-action="Create" class="btn btn-brass">+ Add Customer</a>
+</div>
+
+<div class="card mb-3">
+    <div class="p-3 d-flex gap-2 flex-wrap" style="border-bottom:1px solid var(--line);">
+        <input type="text" class="form-control" style="max-width:260px;" placeholder="Search by name, phone or CNIC..." />
+        <select class="form-select" style="max-width:170px;">
+            <option>All Statuses</option>
+            <option>Active</option>
+            <option>Overdue</option>
+            <option>Cleared</option>
+            <option>Blacklisted</option>
+        </select>
+        <button class="btn btn-outline-ink">Filter</button>
+    </div>
+
+    <table class="table-ledger">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Contact</th>
+                <th>CNIC</th>
+                <th>Guarantors</th>
+                <th>Active Plans</th>
+                <th>Outstanding</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var c in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="cell-name">@c.FullName</div>
+                            <div class="cell-sub">Customer since @c.CreatedOn.ToString("MMM yyyy")</div>
+                        </td>
+                        <td>
+                            <div>@c.Phone</div>
+                            <div class="cell-sub">@c.Address</div>
+                        </td>
+                        <td class="mono">@c.CnicNumber</td>
+                        <td>
+                            <span class="badge-soft">@c.GuarantorCount guarantor@(c.GuarantorCount == 1 ? "" : "s")</span>
+                        </td>
+                        <td class="mono">@c.ActivePlanCount</td>
+                        <td class="amount">Rs @c.OutstandingBalance.ToString("N0")</td>
+                        <td>
+                            @switch (c.Status)
+                            {
+                                case "Active":
+                                    <span class="stamp stamp-active">Active</span>
+                                    break;
+                                case "Overdue":
+                                    <span class="stamp stamp-overdue">Overdue</span>
+                                    break;
+                                case "Cleared":
+                                    <span class="stamp stamp-paid">Cleared</span>
+                                    break;
+                                default:
+                                    <span class="stamp stamp-inactive">@c.Status</span>
+                                    break;
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@c.Id" class="btn btn-ghost btn-sm">View</a>
+                            <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-ghost btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="8">
+                    <div class="empty-state">
+                        <h3>No customers yet</h3>
+                        <p>Add your first customer to start recording installment sales.</p>
+                        <a asp-action="Create" class="btn btn-brass">+ Add Customer</a>
+                    </div>
+                </td></tr>
+            }
+        </tbody>
+    </table>
+</div>

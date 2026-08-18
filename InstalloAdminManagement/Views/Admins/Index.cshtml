@@ -1,0 +1,96 @@
+@model IEnumerable<InstallmentAdminPanel.Models.AdminUser>
+@{
+    ViewData["Title"] = "Admin Users & Roles";
+    ViewBag.Active = "Admins";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Admin Users &amp; Roles</h1>
+        <div class="subtitle">Give staff limited access to the panel &mdash; you stay the owner.</div>
+    </div>
+    <button class="btn btn-brass" data-bs-toggle="modal" data-bs-target="#inviteAdminModal">+ Invite Staff Member</button>
+</div>
+
+<div class="card">
+    <table class="table-ledger">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email / Phone</th>
+                <th>Role</th>
+                <th>Last Active</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var a in Model)
+                {
+                    <tr>
+                        <td class="cell-name">@a.FullName @(a.IsOwner ? " (Owner)" : "")</td>
+                        <td>@a.Email</td>
+                        <td><span class="badge-soft">@a.Role</span></td>
+                        <td class="cell-sub">@a.LastActive.ToString("dd MMM, h:mm tt")</td>
+                        <td>
+                            @if (a.IsActive)
+                            {
+                                <span class="stamp stamp-active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="stamp stamp-inactive">Disabled</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            @if (!a.IsOwner)
+                            {
+                                <a asp-action="Edit" asp-route-id="@a.Id" class="btn btn-ghost btn-sm">Edit</a>
+                                <a asp-action="Revoke" asp-route-id="@a.Id" class="btn btn-ghost btn-sm text-danger">Revoke</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="inviteAdminModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom:1px solid var(--line);">
+                <h2 style="font-size:16px;margin:0;">Invite a Staff Member</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="Invite" method="post">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Full Name</label>
+                            <input class="form-control" />
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Email or Phone</label>
+                            <input class="form-control" />
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">Role</label>
+                            <select class="form-select">
+                                <option>Sales Staff &mdash; add sales, view customers</option>
+                                <option>Collections Staff &mdash; record payments only</option>
+                                <option>Manager &mdash; full access except settings</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top:1px solid var(--line);">
+                    <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-brass">Send Invite</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

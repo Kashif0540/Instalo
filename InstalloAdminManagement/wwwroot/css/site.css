@@ -1,0 +1,526 @@
+/* =========================================================
+   Installment Ledger — Admin Panel Design System
+   A paper-and-ink ledger aesthetic for a store owner's
+   day-to-day finance tool. Not a generic dashboard theme.
+   ========================================================= */
+
+:root {
+  /* Palette */
+  --ink: #1C2333;
+  --ink-soft: #262E44;
+  --paper: #F6F4EF;
+  --card: #FFFFFF;
+  --brass: #B8863B;
+  --brass-dark: #96692A;
+  --ledger-green: #2F6B4F;
+  --ledger-green-bg: #E7F0EA;
+  --ledger-red: #A23B3B;
+  --ledger-red-bg: #F5E7E5;
+  --ledger-amber: #B8863B;
+  --ledger-amber-bg: #F5EBD9;
+  --slate: #5B6472;
+  --slate-light: #8B93A0;
+  --line: #DCD6C8;
+  --line-dark: #33405E;
+
+  --radius: 6px;
+  --shadow-card: 0 1px 2px rgba(28, 35, 51, 0.06), 0 1px 8px rgba(28, 35, 51, 0.04);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.mono, .amount, .figure {
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+a { color: var(--brass-dark); text-decoration: none; }
+a:hover { color: var(--brass); }
+
+/* ---------- App shell ---------- */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: 248px;
+  flex-shrink: 0;
+  background: var(--ink);
+  color: #C9CEDA;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-brand {
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid var(--line-dark);
+}
+
+.sidebar-brand .mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: var(--brass);
+  color: var(--ink);
+  border-radius: 50%;
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.sidebar-brand .store-name {
+  font-family: 'Fraunces', serif;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  display: block;
+  line-height: 1.2;
+}
+
+.sidebar-brand .store-tag {
+  font-size: 11px;
+  color: var(--slate-light);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.sidebar-brand-row { display: flex; align-items: center; }
+
+.nav-section-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--slate-light);
+  padding: 18px 20px 6px;
+}
+
+.sidebar-nav { padding-bottom: 20px; overflow-y: auto; flex: 1; }
+
+.sidebar-nav .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  color: #C9CEDA;
+  font-size: 13.5px;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-nav .nav-link svg { flex-shrink: 0; opacity: 0.85; }
+
+.sidebar-nav .nav-link:hover {
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+}
+
+.sidebar-nav .nav-link.active {
+  background: rgba(184,134,58,0.12);
+  border-left-color: var(--brass);
+  color: #fff;
+}
+
+.sidebar-foot {
+  padding: 14px 20px;
+  border-top: 1px solid var(--line-dark);
+  font-size: 12px;
+  color: var(--slate-light);
+}
+
+/* ---------- Main column ---------- */
+.main-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  height: 62px;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar .page-crumb {
+  font-size: 12px;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 18px; }
+
+.topbar-date { font-size: 12.5px; color: var(--slate); }
+
+.admin-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.admin-chip .avatar {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-family: 'Fraunces', serif;
+}
+
+.content { padding: 24px 28px 48px; flex: 1; }
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.page-header h1 { font-size: 24px; margin: 0 0 4px; }
+.page-header .subtitle { color: var(--slate); font-size: 13.5px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  border: 1px solid transparent;
+}
+
+.btn-brass {
+  background: var(--brass);
+  color: #fff;
+  border-color: var(--brass);
+}
+.btn-brass:hover { background: var(--brass-dark); border-color: var(--brass-dark); color: #fff; }
+
+.btn-outline-ink {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+.btn-outline-ink:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--slate);
+}
+.btn-ghost:hover { color: var(--ink); }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+.card-header-plain {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-header-plain h2 { font-size: 15.5px; margin: 0; }
+
+/* ---------- Stat tiles ---------- */
+.stat-tile {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-tile .stat-label {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--slate);
+  margin-bottom: 8px;
+}
+
+.stat-tile .stat-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 25px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.stat-tile .stat-delta {
+  font-size: 12px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.stat-delta.up { color: var(--ledger-green); }
+.stat-delta.down { color: var(--ledger-red); }
+
+.stat-tile .stat-accent {
+  position: absolute;
+  right: -12px; top: -12px;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  opacity: 0.08;
+}
+.stat-accent.brass { background: var(--brass); }
+.stat-accent.green { background: var(--ledger-green); }
+.stat-accent.red { background: var(--ledger-red); }
+.stat-accent.ink { background: var(--ink); }
+
+/* ---------- Tables ---------- */
+.table-ledger {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.table-ledger thead th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--slate);
+  font-weight: 600;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  background: #FBFAF7;
+}
+
+.table-ledger tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+  color: var(--ink);
+}
+
+.table-ledger tbody tr:last-child td { border-bottom: none; }
+.table-ledger tbody tr:hover { background: #FBFAF7; }
+
+.cell-name { font-weight: 600; }
+.cell-sub { color: var(--slate); font-size: 12px; }
+
+/* ---------- Stamp badges (signature element) ---------- */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 3px 10px 3px 9px;
+  border-radius: 3px;
+  border: 1.5px solid currentColor;
+  transform: rotate(-2deg);
+  white-space: nowrap;
+}
+
+.stamp::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.stamp-paid { color: var(--ledger-green); background: var(--ledger-green-bg); }
+.stamp-due { color: var(--ledger-amber); background: var(--ledger-amber-bg); }
+.stamp-overdue { color: var(--ledger-red); background: var(--ledger-red-bg); transform: rotate(2deg); }
+.stamp-pending { color: var(--slate); background: #EEECE6; }
+.stamp-active { color: var(--ledger-green); background: var(--ledger-green-bg); }
+.stamp-inactive { color: var(--slate); background: #EEECE6; }
+
+/* ---------- Forms ---------- */
+.form-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 5px;
+}
+
+.form-control, .form-select {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  font-size: 13.5px;
+  background: #fff;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(184,134,58,0.15);
+}
+
+.field-hint { font-size: 11.5px; color: var(--slate); margin-top: 4px; }
+
+.form-section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 28px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.form-section-title:first-child { margin-top: 0; }
+
+.guarantor-block {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  background: #FBFAF7;
+  margin-bottom: 14px;
+}
+
+.guarantor-block .guarantor-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brass-dark);
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* ---------- Progress (installment plan completion) ---------- */
+.progress-track {
+  height: 6px;
+  border-radius: 4px;
+  background: var(--line);
+  overflow: hidden;
+  width: 100%;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--brass);
+  border-radius: 4px;
+}
+.progress-fill.complete { background: var(--ledger-green); }
+
+/* ---------- Misc ---------- */
+.divider-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--slate-light);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 22px 0 14px;
+}
+.divider-label::before, .divider-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--slate);
+}
+.empty-state h3 { color: var(--ink); font-size: 16px; margin-bottom: 6px; }
+
+.badge-soft {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #EEECE6;
+  color: var(--slate);
+}
+
+.text-slate { color: var(--slate); }
+.text-brass { color: var(--brass-dark); }
+
+/* ---------- Login page ---------- */
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  background-image: radial-gradient(circle at 20% 20%, rgba(184,134,58,0.10), transparent 45%);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 36px 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+.login-mark {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--brass);
+  color: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .sidebar { position: fixed; left: -248px; z-index: 40; transition: left 0.2s ease; }
+  .sidebar.open { left: 0; }
+  .content { padding: 18px 16px 40px; }
+}
