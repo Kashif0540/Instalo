@@ -1,0 +1,94 @@
+@model IEnumerable<InstallmentAdminPanel.Models.Product>
+@{
+    ViewData["Title"] = "Products";
+    ViewBag.Active = "Products";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Products</h1>
+        <div class="subtitle">Inventory available to sell for cash or on installment.</div>
+    </div>
+    <a asp-action="Create" class="btn btn-brass">+ Add Product</a>
+</div>
+
+<div class="card mb-3">
+    <div class="p-3 d-flex gap-2 flex-wrap" style="border-bottom:1px solid var(--line);">
+        <input type="text" class="form-control" style="max-width:260px;" placeholder="Search products..." />
+        <select class="form-select" style="max-width:180px;">
+            <option>All Vendors</option>
+        </select>
+        <select class="form-select" style="max-width:160px;">
+            <option>All Categories</option>
+        </select>
+    </div>
+
+    <table class="table-ledger">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Vendor</th>
+                <th>Cash Price</th>
+                <th>Installment Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="cell-name">@p.Name</div>
+                            <div class="cell-sub">@p.Category</div>
+                        </td>
+                        <td>@p.VendorName</td>
+                        <td class="amount">Rs @p.CashPrice.ToString("N0")</td>
+                        <td class="amount">Rs @p.InstallmentPrice.ToString("N0")</td>
+                        <td class="mono">
+                            @if (p.StockQuantity <= p.LowStockThreshold)
+                            {
+                                <span class="text-danger">@p.StockQuantity</span>
+                            }
+                            else
+                            {
+                                @p.StockQuantity
+                            }
+                        </td>
+                        <td>
+                            @if (p.StockQuantity == 0)
+                            {
+                                <span class="stamp stamp-overdue">Out of Stock</span>
+                            }
+                            else if (p.IsActive)
+                            {
+                                <span class="stamp stamp-active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="stamp stamp-inactive">Hidden</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-ghost btn-sm">View</a>
+                            <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-ghost btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="7">
+                    <div class="empty-state">
+                        <h3>No products yet</h3>
+                        <p>Add a product and link it to a vendor to start selling.</p>
+                        <a asp-action="Create" class="btn btn-brass">+ Add Product</a>
+                    </div>
+                </td></tr>
+            }
+        </tbody>
+    </table>
+</div>

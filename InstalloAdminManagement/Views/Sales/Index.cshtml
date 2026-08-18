@@ -1,0 +1,80 @@
+@model IEnumerable<InstallmentAdminPanel.Models.Sale>
+@{
+    ViewData["Title"] = "Sales";
+    ViewBag.Active = "Sales";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Sales</h1>
+        <div class="subtitle">Every installment sale made from your store.</div>
+    </div>
+    <a asp-action="Create" class="btn btn-brass">+ New Installment Sale</a>
+</div>
+
+<div class="card">
+    <table class="table-ledger">
+        <thead>
+            <tr>
+                <th>Sale #</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Plan</th>
+                <th>Total Price</th>
+                <th>Progress</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td class="mono">#@s.Id.ToString("D5")</td>
+                        <td class="cell-name">@s.CustomerName</td>
+                        <td>@s.ProductName</td>
+                        <td>@s.PlanName</td>
+                        <td class="amount">Rs @s.TotalPrice.ToString("N0")</td>
+                        <td style="min-width:140px;">
+                            <div class="d-flex justify-content-between cell-sub mb-1">
+                                <span>@s.InstallmentsPaid/@s.TotalInstallments paid</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill @(s.InstallmentsPaid == s.TotalInstallments ? "complete" : "")" style="width:@(s.TotalInstallments > 0 ? (s.InstallmentsPaid * 100 / s.TotalInstallments) : 0)%"></div>
+                            </div>
+                        </td>
+                        <td>
+                            @switch (s.Status)
+                            {
+                                case "Completed":
+                                    <span class="stamp stamp-paid">Completed</span>
+                                    break;
+                                case "Overdue":
+                                    <span class="stamp stamp-overdue">Overdue</span>
+                                    break;
+                                default:
+                                    <span class="stamp stamp-active">Ongoing</span>
+                                    break;
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a asp-action="Details" asp-route-id="@s.Id" class="btn btn-ghost btn-sm">View</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="8">
+                    <div class="empty-state">
+                        <h3>No sales recorded yet</h3>
+                        <p>Start a new installment sale to see it here.</p>
+                        <a asp-action="Create" class="btn btn-brass">+ New Installment Sale</a>
+                    </div>
+                </td></tr>
+            }
+        </tbody>
+    </table>
+</div>

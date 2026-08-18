@@ -1,0 +1,123 @@
+﻿@using System.Security.Claims
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - InstalloAdminManagement</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+   
+    <link rel="stylesheet" href="~/InstalloAdminManagement.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <div class="app-shell">
+
+        <!-- ============ SIDEBAR ============ -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-row">
+                    <span class="mark">@((ViewBag.StoreName ?? "L").ToString().Substring(0, 1))</span>
+                    <div>
+                        <span class="store-name">@(ViewBag.StoreName ?? "Your Store")</span>
+                        <span class="store-tag">Installment Ledger</span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">Overview</div>
+                <a class="nav-link @(ViewBag.Active == "Dashboard" ? "active" : "")" asp-controller="Dashboard" asp-action="Index">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" /><rect x="14" y="3" width="7" height="5" /><rect x="14" y="12" width="7" height="9" /><rect x="3" y="16" width="7" height="5" /></svg>
+                    Dashboard
+                </a>
+
+                <div class="nav-section-label">People</div>
+                <a class="nav-link @(ViewBag.Active == "Customers" ? "active" : "")" asp-controller="Customers" asp-action="Index">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+                    Customers
+                </a>
+                <a class="nav-link @(ViewBag.Active == "Vendors" ? "active" : "")" asp-controller="Vendors" asp-action="Index">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18" /><path d="M5 21V7l7-4 7 4v14" /><path d="M9 21v-6h6v6" /></svg>
+                    Vendors
+                </a>
+                <a class="nav-link @(ViewBag.Active == "Admins" ? "active" : "")" asp-controller="Admins" asp-action="Index">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6" /></svg>
+                    Admin Users &amp; Roles
+                </a>
+
+                <div class="nav-section-label">Catalog</div>
+                <a class="nav-link @(ViewBag.Active == "Products" ? "active" : "")" asp-controller="Products" asp-action="Index">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2" /><path d="M3 8l1.5 12.5A2 2 0 0 0 6.5 22h11a2 2 0 0 0 2-1.5L21 8" /><path d="M9 12h6" /></svg>
+                    Products
+                </a>
+                <a class="nav-link @(ViewBag.Active == "Plans" ? "active" : "")" asp-controller="InstallmentPlans" asp-action="Index">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+                    Installment Plans
+                </a>
+
+                <div class="nav-section-label">Money</div>
+                <a class="nav-link @(ViewBag.Active == "Sales" ? "active" : "")" asp-controller="Sales" asp-action="Index">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" /><path d="M14 2v6h6" /></svg>
+                    Sales
+                </a>
+                <a class="nav-link @(ViewBag.Active == "Payments" ? "active" : "")" asp-controller="Payments" asp-action="Index">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20" /></svg>
+                    Collections &amp; Payments
+                </a>
+                <a class="nav-link @(ViewBag.Active == "Reports" ? "active" : "")" asp-controller="Reports" asp-action="Index">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18" /><path d="M18 17V9M13 17V5M8 17v-3" /></svg>
+                    Reports &amp; Income
+                </a>
+
+                <div class="nav-section-label">System</div>
+                <a class="nav-link @(ViewBag.Active == "Settings" ? "active" : "")" asp-controller="Settings" asp-action="Index">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" /></svg>
+                    Store Settings
+                </a>
+            </nav>
+
+            <div class="sidebar-foot">
+                &copy; 2026 InstalloAdminManagement
+            </div>
+        </aside>
+
+        <!-- ============ MAIN COLUMN ============ -->
+        <div class="main-col">
+            <header class="topbar">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-ghost d-md-none p-1" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18" /></svg>
+                    </button>
+                    <span class="page-crumb">@ViewBag.Active</span>
+                </div>
+                <div class="topbar-right">
+                    <span class="topbar-date">@DateTime.Now.ToString("dddd, dd MMM yyyy")</span>
+                    <div class="admin-chip">
+                        <span class="avatar">A</span>
+                        <span>@(User?.Identity?.Name ?? "Store Owner")</span>
+                    </div>
+                    <a class="btn btn-ghost p-1" asp-controller="Account" asp-action="Logout" title="Log out">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="M16 17l5-5-5-5" /><path d="M21 12H9" /></svg>
+                    </a>
+                </div>
+            </header>
+
+            <main role="main" class="content">
+                @RenderBody()
+            </main>
+
+            <footer class="border-top footer text-muted px-4 py-3" style="font-size:12px;">
+                &copy; 2026 - InstalloAdminManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

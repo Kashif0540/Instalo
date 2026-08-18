@@ -1,0 +1,61 @@
+@model InstallmentAdminPanel.Models.InstallmentPlan
+@{
+    ViewData["Title"] = "New Plan Template";
+    ViewBag.Active = "Plans";
+}
+
+<div class="page-header">
+    <div>
+        <h1>New Plan Template</h1>
+        <div class="subtitle">This template can be applied to any sale at checkout.</div>
+    </div>
+</div>
+
+<form asp-action="Create" method="post" class="card p-4" style="max-width: 680px;">
+    <div class="row g-3">
+        <div class="col-md-12">
+            <label class="form-label">Plan Name</label>
+            <input asp-for="Name" class="form-control" placeholder="e.g. 6 Months Standard" />
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">Description (optional)</label>
+            <input asp-for="Description" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Duration (months)</label>
+            <input asp-for="DurationMonths" type="number" class="form-control mono" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Payment Frequency</label>
+            <select asp-for="PaymentFrequency" class="form-select">
+                <option>Monthly</option>
+                <option>Bi-Weekly</option>
+                <option>Weekly</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Down Payment (%)</label>
+            <input asp-for="DownPaymentPercent" type="number" class="form-control mono" />
+            <div class="field-hint">Minimum upfront payment required at time of sale.</div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Markup / Interest (%)</label>
+            <input asp-for="MarkupPercent" type="number" class="form-control mono" />
+            <div class="field-hint">Added on top of cash price across the plan duration.</div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Late Fee (per missed installment)</label>
+            <input class="form-control mono" placeholder="Rs" />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Grace Period (days)</label>
+            <input class="form-control mono" placeholder="e.g. 3" />
+            <div class="field-hint">Days after due date before a fee / overdue flag applies.</div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 pt-3 mt-3" style="border-top:1px solid var(--line);">
+        <button type="submit" class="btn btn-brass">Save Plan</button>
+        <a asp-action="Index" class="btn btn-ghost">Cancel</a>
+    </div>
+</form>

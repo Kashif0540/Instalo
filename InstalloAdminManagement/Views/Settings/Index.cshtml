@@ -1,0 +1,120 @@
+@model InstallmentAdminPanel.Models.StoreSettings
+@{
+    ViewData["Title"] = "Store Settings";
+    ViewBag.Active = "Settings";
+}
+
+<div class="page-header">
+    <div>
+        <h1>Store Settings</h1>
+        <div class="subtitle">Store profile, currency, and the rules that apply store-wide.</div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <form asp-action="Save" method="post" class="card p-4 mb-3">
+            <div class="form-section-title">Store Profile</div>
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label class="form-label">Store Name</label>
+                    <input asp-for="StoreName" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Currency</label>
+                    <select asp-for="Currency" class="form-select">
+                        <option>PKR (Rs)</option>
+                        <option>USD ($)</option>
+                        <option>INR (₹)</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Store Address</label>
+                    <input asp-for="Address" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Contact Phone</label>
+                    <input asp-for="Phone" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Store Logo</label>
+                    <input type="file" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-section-title">Late Fee Rules</div>
+            <div class="guarantor-block">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Late Fee Type</label>
+                        <select asp-for="LateFeeType" class="form-select">
+                            <option value="Fixed">Fixed amount per missed installment</option>
+                            <option value="Percentage">Percentage of installment amount</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Late Fee Value</label>
+                        <input asp-for="LateFeeValue" type="number" class="form-control mono" placeholder="e.g. 200 or 5" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Grace Period (days)</label>
+                        <input asp-for="GracePeriodDays" type="number" class="form-control mono" />
+                        <div class="field-hint">No fee applied if paid within this many days of due date.</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Apply Fee</label>
+                        <select asp-for="LateFeeRecurrence" class="form-select">
+                            <option value="OneTime">Once per missed installment</option>
+                            <option value="Daily">Daily, while overdue</option>
+                            <option value="Weekly">Weekly, while overdue</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-check">
+                            <input asp-for="AutoFlagDefaultAfterDays" class="form-check-input" type="checkbox" />
+                            <label class="form-check-label" style="font-size:13px;">
+                                Automatically mark a customer as "In Default" after 3 consecutive missed installments
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section-title">Notifications</div>
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked />
+                        <label class="form-check-label" style="font-size:13px;">Send SMS reminder 2 days before an installment is due</label>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked />
+                        <label class="form-check-label" style="font-size:13px;">Send SMS alert the day an installment becomes overdue</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 pt-3 mt-3" style="border-top:1px solid var(--line);">
+                <button type="submit" class="btn btn-brass">Save Settings</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card p-3 mb-3">
+            <h2 style="font-size:15px;">Data &amp; Backup</h2>
+            <p class="cell-sub">Export your full ledger for safekeeping or accounting.</p>
+            <div class="d-flex gap-2 flex-wrap">
+                <button class="btn btn-outline-ink btn-sm">Export All Data (Excel)</button>
+                <button class="btn btn-outline-ink btn-sm">Backup Now</button>
+            </div>
+        </div>
+        <div class="card p-3">
+            <h2 style="font-size:15px;">Danger Zone</h2>
+            <p class="cell-sub">These actions are irreversible.</p>
+            <button class="btn btn-sm" style="border:1px solid var(--ledger-red);color:var(--ledger-red);background:transparent;">Deactivate Store Account</button>
+        </div>
+    </div>
+</div>
